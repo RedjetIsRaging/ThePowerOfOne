@@ -7,5 +7,6 @@ level_1 = {
     'house': level_1_base_path + 'level_1_house.csv',
     'flower': level_1_base_path + 'level_1_flowers.csv',
     'enemies': level_1_base_path + 'level_1_enemy.csv',
+    'constraints': level_1_base_path + 'level_1_constraints.csv',
     'player': level_1_base_path + 'level_1_player.csv'
 }
