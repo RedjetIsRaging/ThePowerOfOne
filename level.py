@@ -12,11 +12,8 @@ class Level:
     def __init__(self, level_data: list[str], surface):
         # Set up the level
         self.display_surface = surface
-        # self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        # self.initialize_level(level_data)
-        self.world_shift = -8
-        # self.current_x = 0
+        self.world_shift = 0
 
         # Player
         player_layout = import_csv_layout(level_data['player'])
@@ -25,6 +22,7 @@ class Level:
         self.player_setup(player_layout)
 
         self.sprites_group = []
+        self.terrain_sprites = []
         for item in level_1.keys():
             if item not in ['player', 'enemies', 'flower', 'constraints']:
                 layout = import_csv_layout(level_data[item])
@@ -60,6 +58,9 @@ class Level:
                         sprite = StaticTile(tile_size, x, y, tile_surface)
                         sprite_group.add(sprite)
 
+                        if tile_type == 'terrain':
+                            self.terrain_sprites.append(sprite)
+
                     if tile_type == 'flower':
                         sprite = AnimatedTile(tile_size, x, y, 'levels/level_1/graphics/tiles/flower')
                         sprite.animation_speed = 0.03  # don't need our flowers spinning *that* fast, do we
@@ -82,7 +83,8 @@ class Level:
                 x = column_index * tile_size
                 y = row_index * tile_size
                 if val == '0':
-                    print("player goes here")
+                    sprite = Player((x, y))
+                    self.player.add(sprite)
                 if val == '1':
                     end_surface = pygame.image.load('levels/universal/player.png').convert_alpha()
                     sprite = StaticTile(tile_size, x, y, end_surface)
@@ -120,7 +122,7 @@ class Level:
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
 
-        for sprite in self.tiles.sprites():
+        for sprite in self.terrain_sprites:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
@@ -140,7 +142,7 @@ class Level:
         player = self.player.sprite
         player.apply_gravity()
 
-        for sprite in self.tiles.sprites():
+        for sprite in self.terrain_sprites:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
@@ -173,17 +175,10 @@ class Level:
         self.enemy_collision_reverse()
         self.constraint_sprites.update(self.world_shift)  # Don't want to display the enemy constraints
 
+        self.player.update()
+        self.horizontal_movement_collision()
+        self.vertical_movement_collision()
+        self.scroll_x()
+        self.player.draw(self.display_surface)
         self.goal.update(self.world_shift)
         self.goal.draw(self.display_surface)
-
-
-        # Render level tiles
-        # self.tiles.update(self.world_shift)
-        # self.tiles.draw(self.display_surface)
-        # self.scroll_x()
-        #
-        # # Render player
-        # self.player.update()
-        # self.horizontal_movement_collision()
-        # self.vertical_movement_collision()
-        # self.player.draw(self.display_surface)
