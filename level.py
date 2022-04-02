@@ -1,6 +1,6 @@
 import pygame
 from tiles import Tile
-from settings import tile_size
+from settings import tile_size, game_width
 from player import Player
 
 
@@ -12,7 +12,6 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.initialize_level(level_data)
         self.world_shift = 0
-
 
     def initialize_level(self, layout) -> None:
         for row_index, row in enumerate(layout):
@@ -27,6 +26,21 @@ class Level:
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
 
+    def scroll_x(self):
+        player = self.player.sprite
+        player_x = player.rect.centerx
+        direction_x = player.direction.x
+
+        if player_x < game_width / 3 and direction_x < 0:
+            self.world_shift = 5
+            player.speed = 0
+        elif player_x > game_width / 2 and direction_x > 0:
+            self.world_shift = -5
+            player.speed = 0
+        else:
+            self.world_shift = 0
+            player.speed = 5
+
     def draw_level(self) -> None:
         # Render level tiles
         self.tiles.update(self.world_shift)
@@ -35,3 +49,4 @@ class Level:
         # Render player
         self.player.update()
         self.player.draw(self.display_surface)
+        self.scroll_x()
