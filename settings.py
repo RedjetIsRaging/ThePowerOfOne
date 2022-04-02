@@ -3,17 +3,21 @@
 level_map = [
     '                             ',
     '                             ',
-    '                             ',
-    ' XX   XXX            XX      ',
-    ' XX P                        ',
-    ' XXXX          XX      XX    ',
-    ' XXXX        XX          XX  ',
+    '                   ####     ',
+    ' XX   XXX         #  ###     ',
+    ' XX P             #######    ',
+    ' XXXX             #######    ',
+    ' XXXX             ##  ##    ',
     ' XX      X XXXX     XX   XXX ',
     '         X XXXX     XX   XXX ',
     '                    XX  XXXX ',
     'XXXXXXXXXXXXXXXXXX  XX  XXXX '
 ]
 
+# Level settings
 tile_size = 64
 game_width = 1200
 game_height = len(level_map) * tile_size
+
+# Player settings
+player_speed = 8
