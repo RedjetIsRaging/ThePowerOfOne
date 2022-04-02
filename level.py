@@ -1,5 +1,5 @@
 import pygame
-from tiles import Tile, StaticTile
+from tiles import Tile, StaticTile, AnimatedTile
 from settings import tile_size, game_width, player_speed
 from player import Player
 from utils import import_csv_layout, import_cut_graphics
@@ -13,13 +13,17 @@ class Level:
         # self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         # self.initialize_level(level_data)
-        self.world_shift = -7
+        self.world_shift = 0
         # self.current_x = 0
 
         self.sprites_group = []
         for item in level_1.keys():
             layout = import_csv_layout(level_data[item])
             self.sprites_group.append(self.create_tile_group(layout, item))
+
+        # flowers
+        flower_layout = import_csv_layout(level_data['flower'])
+        self.sprites_group.append(self.create_tile_group(flower_layout, 'flower'))
 
     def create_tile_group(self, layout, tile_type):
         sprite_group = pygame.sprite.Group()
@@ -30,10 +34,14 @@ class Level:
                     x = column_index * tile_size
                     y = row_index * tile_size
 
-                    if tile_type != 'player':
+                    if tile_type not in ['player', 'enemy', 'flower']:
                         terrain_tile_list = import_cut_graphics('levels/level_1/graphics/outside_tileset.png')
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_size, x, y, tile_surface)
+                        sprite_group.add(sprite)
+
+                    if tile_type == 'flower':
+                        sprite = AnimatedTile(tile_size, x, y, 'levels/level_1/graphics/tiles/flower')
                         sprite_group.add(sprite)
 
         return sprite_group

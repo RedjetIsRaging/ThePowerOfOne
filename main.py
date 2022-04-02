@@ -22,7 +22,7 @@ def main() -> None:
                 pygame.quit()
                 sys.exit()
 
-        screen.fill('black')
+        screen.fill('cyan')
         level.draw_level()
 
         pygame.display.update()

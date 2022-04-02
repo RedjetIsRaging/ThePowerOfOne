@@ -4,7 +4,7 @@ from os import walk
 from settings import tile_size
 
 
-def import_folder(path: str) -> list[str]:
+def import_folder(path: str) -> list[pygame.Surface]:
     surface_list = []
 
     for _, __, img_files in walk(path):
@@ -12,6 +12,7 @@ def import_folder(path: str) -> list[str]:
             full_path = path + "/" + img
             image_surface = pygame.image.load(full_path).convert_alpha()
             surface_list.append(image_surface)
+
     return surface_list
 
 
@@ -35,7 +36,7 @@ def import_cut_graphics(path: str) -> list[pygame.Surface]:
         for col in range(tile_num_x):
             x = col * tile_size
             y = row * tile_size
-            new_surface = pygame.Surface((tile_size, tile_size))
+            new_surface = pygame.Surface((tile_size, tile_size), flags=pygame.SRCALPHA)
             new_surface.blit(surface, (0, 0), pygame.Rect(x, y, tile_size, tile_size))
             cut_tiles.append(new_surface)
 
