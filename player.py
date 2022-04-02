@@ -80,14 +80,14 @@ class Player(pygame.sprite.Sprite):
             self.jump()
 
     def get_status(self):
-        if self.direction.y < 0:
+        if self.direction.y < 0 and not self.on_ground:
             self.status = "jump"
-        elif self.direction.y > 1:
+        elif self.direction.y > 1 and not self.on_ground:
             self.status = "fall"
         else:
-            if self.direction.x != 0:
+            if self.direction.x != 0 and self.on_ground:
                 self.status = "schmoov"
-            else:
+            elif self.direction.x == 0 and self.on_ground:
                 self.status = "idle"
 
     def apply_gravity(self):

@@ -6,6 +6,9 @@ from level import Level
 
 def main() -> None:
     pygame.init()
+    pygame.display.set_caption("The power of one!")
+    icon = pygame.image.load("assets/icon.png")
+    pygame.display.set_icon(icon)
     screen = pygame.display.set_mode((game_width, game_height))
     clock = pygame.time.Clock()
     level = Level(level_map, screen)
