@@ -1,12 +1,14 @@
-import pygame, sys
+import pygame
+import sys
+from settings import *
+from level import Level
 
 
-def main():
+def main() -> None:
     pygame.init()
-    game_width = 1200
-    game_height = 700
     screen = pygame.display.set_mode((game_width, game_height))
     clock = pygame.time.Clock()
+    level = Level(level_map, screen)
 
     while True:
         for event in pygame.event.get():
@@ -15,6 +17,7 @@ def main():
                 sys.exit()
 
         screen.fill("black")
+        level.draw_level()
 
         pygame.display.update()
         clock.tick(60)
