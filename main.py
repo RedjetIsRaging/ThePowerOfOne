@@ -2,6 +2,7 @@ import pygame
 import sys
 from settings import *
 from level import Level
+from game_data import level_1
 
 
 def main() -> None:
@@ -9,9 +10,11 @@ def main() -> None:
     pygame.display.set_caption("The power of one!")
     icon = pygame.image.load("assets/icon.png")
     pygame.display.set_icon(icon)
+
     screen = pygame.display.set_mode((game_width, game_height))
     clock = pygame.time.Clock()
-    level = Level(level_map, screen)
+
+    level = Level(level_1, screen)
 
     while True:
         for event in pygame.event.get():
@@ -19,7 +22,7 @@ def main() -> None:
                 pygame.quit()
                 sys.exit()
 
-        screen.fill("black")
+        screen.fill('black')
         level.draw_level()
 
         pygame.display.update()

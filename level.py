@@ -1,18 +1,42 @@
 import pygame
-from tiles import Tile
+from tiles import Tile, StaticTile
 from settings import tile_size, game_width, player_speed
 from player import Player
+from utils import import_csv_layout, import_cut_graphics
+from game_data import level_1
 
 
 class Level:
     def __init__(self, level_data: list[str], surface):
         # Set up the level
         self.display_surface = surface
-        self.tiles = pygame.sprite.Group()
+        # self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        self.initialize_level(level_data)
-        self.world_shift = 0
-        self.current_x = 0
+        # self.initialize_level(level_data)
+        self.world_shift = -7
+        # self.current_x = 0
+
+        self.sprites_group = []
+        for item in level_1.keys():
+            layout = import_csv_layout(level_data[item])
+            self.sprites_group.append(self.create_tile_group(layout, item))
+
+    def create_tile_group(self, layout, tile_type):
+        sprite_group = pygame.sprite.Group()
+
+        for row_index, row in enumerate(layout):
+            for column_index, val in enumerate(row):
+                if val != '-1':
+                    x = column_index * tile_size
+                    y = row_index * tile_size
+
+                    if tile_type != 'player':
+                        terrain_tile_list = import_cut_graphics('levels/level_1/graphics/outside_tileset.png')
+                        tile_surface = terrain_tile_list[int(val)]
+                        sprite = StaticTile(tile_size, x, y, tile_surface)
+                        sprite_group.add(sprite)
+
+        return sprite_group
 
     def initialize_level(self, layout) -> None:
         for row_index, row in enumerate(layout):
@@ -83,13 +107,17 @@ class Level:
             player.on_ceiling = False
 
     def draw_level(self) -> None:
-        # Render level tiles
-        self.tiles.update(self.world_shift)
-        self.tiles.draw(self.display_surface)
-        self.scroll_x()
+        for sprite_group in self.sprites_group:
+            sprite_group.update(self.world_shift)
+            sprite_group.draw(self.display_surface)
 
-        # Render player
-        self.player.update()
-        self.horizontal_movement_collision()
-        self.vertical_movement_collision()
-        self.player.draw(self.display_surface)
+        # Render level tiles
+        # self.tiles.update(self.world_shift)
+        # self.tiles.draw(self.display_surface)
+        # self.scroll_x()
+        #
+        # # Render player
+        # self.player.update()
+        # self.horizontal_movement_collision()
+        # self.vertical_movement_collision()
+        # self.player.draw(self.display_surface)
