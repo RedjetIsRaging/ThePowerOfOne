@@ -1,9 +1,11 @@
+# a 2d list representation of the level
+# X's are tiles, P is the starting position of the player
 level_map = [
     '                             ',
     '                             ',
     '                             ',
     ' XX   XXX            XX      ',
-    ' XX                          ',
+    ' XX P                        ',
     ' XXXX          XX      XX    ',
     ' XXXX        XX          XX  ',
     ' XX      X XXXX     XX   XXX ',
