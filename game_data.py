@@ -1,4 +1,4 @@
-from settings import game_height, game_width
+from settings import game_height
 
 level_1_base_path = "assets/levels/level_1/level/"
 level_1 = {

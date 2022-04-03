@@ -3,7 +3,6 @@ import sys
 from settings import *
 from level import Level
 from overworld import Overworld
-from pygame.locals import *
 from pygame import mixer
 
 

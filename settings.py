@@ -1,18 +1,18 @@
 # a 2d list representation of the level
 # X's are tiles, P is the starting position of the player
-level_map = [
-    '                             ',
-    '                             ',
-    '                   ####     ',
-    ' XX   XXX         #  ###     ',
-    ' XX P             #######    ',
-    ' XXXX             #######    ',
-    ' XXXX             ##  ##    ',
-    ' XX      X XXXX     XX   XXX ',
-    '         X XXXX     XX   XXX ',
-    '                    XX  XXXX ',
-    'XXXXXXXXXXXXXXXXXX  XX  XXXX '
-]
+# level_map = [
+#     '                             ',
+#     '                             ',
+#     '                   ####     ',
+#     ' XX   XXX         #  ###     ',
+#     ' XX P             #######    ',
+#     ' XXXX             #######    ',
+#     ' XXXX             ##  ##    ',
+#     ' XX      X XXXX     XX   XXX ',
+#     '         X XXXX     XX   XXX ',
+#     '                    XX  XXXX ',
+#     'XXXXXXXXXXXXXXXXXX  XX  XXXX '
+# ]
 
 # Level settings
 vertical_tile_count = 11
