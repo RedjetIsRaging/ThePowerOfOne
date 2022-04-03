@@ -3,6 +3,8 @@ import sys
 from settings import *
 from level import Level
 from overworld import Overworld
+from pygame.locals import *
+from pygame import mixer
 
 
 def main() -> None:
@@ -31,6 +33,10 @@ def main() -> None:
 
     pygame.init()
     engage_brand()  # Add window icon, set window title
+
+    mixer.init()
+    mixer.music.load('assets/music/music.mp3')
+    mixer.music.play()
 
     screen = pygame.display.set_mode((game_width, game_height))
     clock = pygame.time.Clock()

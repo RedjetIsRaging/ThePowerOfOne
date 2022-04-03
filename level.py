@@ -191,15 +191,7 @@ class Level:
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
-            self.play_cutscene()
             self.create_overworld(self.current_level, self.new_max_level)
-
-    def play_cutscene(self):
-        font = pygame.font.SysFont(None, 100)
-        text_surface = font.render("AMONG US", True, 'black')
-        text_rect = text_surface.get_rect()
-        text_rect.topleft = (100, 100)
-        self.display_surface.blit(text_surface, text_rect)
 
     def enemy_collision_reverse(self):
         for enemy in self.enemy_sprites.sprites():
