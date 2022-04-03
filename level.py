@@ -4,7 +4,7 @@ from enemy import Enemy
 from settings import tile_size, game_width, player_speed
 from player import Player
 from utils import import_csv_layout, import_cut_graphics
-from game_data import level_1
+from game_data import level_1_files
 from clouds import Clouds
 
 
@@ -23,7 +23,7 @@ class Level:
 
         self.sprites_group = []
         self.terrain_sprites = []
-        for item in level_1.keys():
+        for item in level_1_files.keys():
             if item not in ['player', 'enemies', 'flower', 'constraints']:
                 layout = import_csv_layout(level_data[item])
                 self.sprites_group.append(self.create_tile_group(layout, item))
