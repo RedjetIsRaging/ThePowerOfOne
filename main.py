@@ -36,17 +36,14 @@ def main() -> None:
     clock = pygame.time.Clock()
     game = Game()
 
-    # address this level = Level(level_1_files, screen)
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-        screen.fill('cyan')
+        screen.fill('black')
         game.run()
-        # address this level.draw_level()
 
         pygame.display.update()
         clock.tick(60)
@@ -54,7 +51,7 @@ def main() -> None:
 
 def engage_brand():
     pygame.display.set_caption("The power of one!")
-    icon = pygame.image.load("assets/icon.png")
+    icon = pygame.image.load("assets/icon32.png")
     pygame.display.set_icon(icon)
 
 

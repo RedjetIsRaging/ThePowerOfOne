@@ -1,7 +1,7 @@
 import pygame
 from tiles import Tile, StaticTile, AnimatedTile
 from enemy import Enemy
-from settings import tile_size, game_width, player_speed
+from settings import tile_size, game_width, game_height, player_speed
 from player import Player
 from utils import import_csv_layout, import_cut_graphics
 from game_data import level_1
@@ -22,6 +22,8 @@ class Level:
         self.current_level = current_level
         level_data = levels.get(self.current_level)
         self.new_max_level = level_data.get('unlock')
+
+        self.background_color = level_data.get('background_color')
 
         # Player
         player_layout = import_csv_layout(level_data['player'])
@@ -97,7 +99,7 @@ class Level:
                     sprite = Player((x, y))
                     self.player.add(sprite)
                 if val == '1':
-                    end_surface = pygame.image.load('assets/levels/universal/player.png').convert_alpha()
+                    end_surface = pygame.image.load('assets/levels/universal/clone.png').convert_alpha()
                     sprite = StaticTile(tile_size, x, y, end_surface)
                     self.goal.add(sprite)
 
@@ -177,12 +179,21 @@ class Level:
         elif keys[pygame.K_ESCAPE]:
             self.create_overworld(self.current_level, 0)
 
+    def check_death(self):
+        if self.player.sprite.rect.top > game_height:
+            self.create_overworld(self.current_level, 0)
+
+    def check_win(self):
+        if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
+            self.create_overworld(self.current_level, self.new_max_level)
+
     def enemy_collision_reverse(self):
         for enemy in self.enemy_sprites.sprites():
             if pygame.sprite.spritecollide(enemy, self.constraint_sprites, False):
                 enemy.reverse()
 
     def draw_level(self) -> None:
+        self.display_surface.fill(self.background_color)
         self.clouds.draw(self.display_surface, self.world_shift)
 
         for sprite_group in self.sprites_group:
@@ -192,7 +203,7 @@ class Level:
         self.enemy_sprites.draw(self.display_surface)
         self.enemy_sprites.update(self.world_shift)
         self.enemy_collision_reverse()
-        self.constraint_sprites.update(self.world_shift)  # Don't want to display the enemy constraints
+        self.constraint_sprites.update(self.world_shift)
 
         self.player.update()
         self.horizontal_movement_collision()
@@ -201,3 +212,6 @@ class Level:
         self.player.draw(self.display_surface)
         self.goal.update(self.world_shift)
         self.goal.draw(self.display_surface)
+
+        self.check_death()
+        self.check_win()

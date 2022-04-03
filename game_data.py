@@ -16,9 +16,8 @@ level_1 = {
     'constraints': level_1_base_path + 'level_1_constraints.csv',
     'player': level_1_base_path + 'level_1_player.csv',
     'node_pos': (150, game_height / 2),
-    'background_color': 'blue',
-    'unlock': 1,
-    'node_graphics': 'assets/overworld/0.png'
+    'background_color': 'cyan',
+    'unlock': 1
 }
 
 levels = {

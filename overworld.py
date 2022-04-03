@@ -5,12 +5,11 @@ from game_data import levels
 class LevelNode(pygame.sprite.Sprite):
     def __init__(self, pos, status, icon_speed):
         super().__init__()
-        self.image: pygame.Surface = pygame.Surface((100, 80))
 
         if status == 'available':
-            self.image.fill('red')
-        elif status == 'locked':
-            self.image.fill('grey')
+            self.image = pygame.image.load("assets/overworld/0.png")
+        else:
+            self.image = pygame.image.load('assets/overworld/1.png')
 
         self.rect: pygame.Rect = self.image.get_rect(center=pos)
 
@@ -24,8 +23,7 @@ class Icon(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.pos = pos
-        self.image: pygame.Surface = pygame.Surface((20, 20))
-        self.image.fill('green')
+        self.image: pygame.Surface = pygame.image.load('assets/icon64.png').convert_alpha()
         self.rect: pygame.Rect = self.image.get_rect(center=pos)
 
     def update(self):
@@ -59,7 +57,7 @@ class Overworld:
 
     def draw_paths(self) -> None:
         points: list[str] = [node.get('node_pos') for index, node in enumerate(levels.values()) if index <= self.max_level]
-        pygame.draw.lines(self.display_surface, 'red', False, points, 6)
+        pygame.draw.lines(self.display_surface, '#ffd700', False, points, 20)
 
     def setup_icon(self) -> None:
         self.icon = pygame.sprite.GroupSingle()
@@ -101,6 +99,10 @@ class Overworld:
                 self.move_direction = pygame.math.Vector2(0, 0)
 
     def run(self):
+        # https://stackoverflow.com/questions/28005641/how-to-add-a-background-image-into-pygame
+        bg = pygame.image.load('assets/overworld/background.png').convert_alpha()
+        self.display_surface.blit(bg, (0, 0))
+
         self.register_input()
         self.update_icon_position()
         self.icon.update()
