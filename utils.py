@@ -4,7 +4,7 @@ from os import walk
 from settings import tile_size
 
 
-def import_folder(path: str) -> list[pygame.Surface]:
+def import_folder(path):
     surface_list = []
 
     for _, __, img_files in walk(path):
@@ -16,7 +16,7 @@ def import_folder(path: str) -> list[pygame.Surface]:
     return surface_list
 
 
-def import_csv_layout(path: str) -> list[list[str]]:
+def import_csv_layout(path):
     terrain_map = []
     with open(path) as level_map:
         level = reader(level_map, delimiter=',')
@@ -26,7 +26,7 @@ def import_csv_layout(path: str) -> list[list[str]]:
     return terrain_map
 
 
-def import_cut_graphics(path: str) -> list[pygame.Surface]:
+def import_cut_graphics(path):
     surface = pygame.image.load(path).convert_alpha()
     tile_num_x = int(surface.get_size()[0] / tile_size)
     tile_num_y = int(surface.get_size()[1] / tile_size)
