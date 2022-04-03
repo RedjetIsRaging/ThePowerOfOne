@@ -7,9 +7,9 @@ class LevelNode(pygame.sprite.Sprite):
         super().__init__()
 
         if status == 'available':
-            self.image = pygame.image.load("assets/overworld/0.png")
+            self.image = pygame.image.load("assets/overworld/0.png").convert_alpha()
         else:
-            self.image = pygame.image.load('assets/overworld/1.png')
+            self.image = pygame.image.load('assets/overworld/1.png').convert_alpha()
 
         self.rect: pygame.Rect = self.image.get_rect(center=pos)
 
