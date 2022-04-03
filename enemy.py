@@ -4,9 +4,9 @@ from random import randint
 
 
 class Enemy(AnimatedTile):
-    def __init__(self, size, x, y):
-        super().__init__(size, x, y, 'assets/enemies/snake/')
-        self.speed = randint(3, 5)
+    def __init__(self, size, x, y, path):
+        super().__init__(size, x, y, path)
+        self.speed = randint(2, 3)
 
     def move(self):
         self.rect.x += self.speed

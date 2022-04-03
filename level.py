@@ -4,7 +4,6 @@ from enemy import Enemy
 from settings import tile_size, game_width, game_height, player_speed
 from player import Player
 from utils import import_csv_layout, import_cut_graphics
-from game_data import level_1
 from clouds import Clouds
 from game_data import levels
 
@@ -33,25 +32,28 @@ class Level:
 
         self.sprites_group = []
         self.terrain_sprites = []
-        for item in level_1.keys():
+        for item in level_data.keys():
             if item == 'player':
                 break
 
-            if item not in ['player', 'enemies', 'flower', 'constraints']:
+            if item not in ['enemies', 'flower', 'constraints']:
                 layout = import_csv_layout(level_data[item])
                 self.sprites_group.append(self.create_tile_group(layout, item))
 
         # flowers
-        flower_layout = import_csv_layout(level_data['flower'])
-        self.sprites_group.append(self.create_tile_group(flower_layout, 'flower'))
+        if 'flower' in level_data:
+            flower_layout = import_csv_layout(level_data.get('flower'))
+            self.sprites_group.append(self.create_tile_group(flower_layout, 'flower'))
 
         # Enemy
-        enemy_layout = import_csv_layout(level_data['enemies'])
-        self.enemy_sprites = self.create_tile_group(enemy_layout, 'enemies')
+        if 'enemies' in level_data:
+            enemy_layout = import_csv_layout(level_data['enemies'])
+            self.enemy_sprites = self.create_tile_group(enemy_layout, 'enemies')
 
         # Enemy constraint
-        constraint_layout = import_csv_layout(level_data['constraints'])
-        self.constraint_sprites = self.create_tile_group(constraint_layout, 'constraints')
+        if 'constraints' in level_data:
+            constraint_layout = import_csv_layout(level_data['constraints'])
+            self.constraint_sprites = self.create_tile_group(constraint_layout, 'constraints')
 
         # Clouds
         self.clouds = Clouds(400, game_width, 8)
@@ -66,7 +68,7 @@ class Level:
                     y = row_index * tile_size
 
                     if tile_type not in ['player', 'enemies', 'flower', 'constraints']:
-                        terrain_tile_list = import_cut_graphics('assets/levels/level_1/graphics/outside_tileset.png')
+                        terrain_tile_list = import_cut_graphics(levels.get(self.current_level).get('tile_set'))
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_size, x, y, tile_surface)
                         sprite_group.add(sprite)
@@ -80,7 +82,7 @@ class Level:
                         sprite_group.add(sprite)
 
                     if tile_type == 'enemies':
-                        sprite = Enemy(tile_size, x, y)
+                        sprite = Enemy(tile_size, x, y, levels.get(self.current_level).get('enemy_sprites'))
                         sprite.animation_speed = 0.08
                         sprite_group.add(sprite)
 
@@ -183,6 +185,10 @@ class Level:
         if self.player.sprite.rect.top > game_height:
             self.create_overworld(self.current_level, 0)
 
+        if 'enemies' in levels.get(self.current_level):
+            if pygame.sprite.spritecollide(self.player.sprite, self.enemy_sprites, False):
+                self.create_overworld(self.current_level, 0)
+
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.create_overworld(self.current_level, self.new_max_level)
@@ -194,16 +200,19 @@ class Level:
 
     def draw_level(self) -> None:
         self.display_surface.fill(self.background_color)
-        self.clouds.draw(self.display_surface, self.world_shift)
+
+        if levels.get(self.current_level).get('clouds'):
+            self.clouds.draw(self.display_surface, self.world_shift)
 
         for sprite_group in self.sprites_group:
             sprite_group.update(self.world_shift)
             sprite_group.draw(self.display_surface)
 
-        self.enemy_sprites.draw(self.display_surface)
-        self.enemy_sprites.update(self.world_shift)
-        self.enemy_collision_reverse()
-        self.constraint_sprites.update(self.world_shift)
+        if 'enemies' in levels.get(self.current_level):
+            self.enemy_sprites.draw(self.display_surface)
+            self.enemy_sprites.update(self.world_shift)
+            self.enemy_collision_reverse()
+            self.constraint_sprites.update(self.world_shift)
 
         self.player.update()
         self.horizontal_movement_collision()

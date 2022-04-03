@@ -56,8 +56,9 @@ class Overworld:
             self.node_sprites.add(node_sprite)
 
     def draw_paths(self) -> None:
-        points: list[str] = [node.get('node_pos') for index, node in enumerate(levels.values()) if index <= self.max_level]
-        pygame.draw.lines(self.display_surface, '#ffd700', False, points, 20)
+        if self.max_level > 0:
+            points: list[str] = [node.get('node_pos') for index, node in enumerate(levels.values()) if index <= self.max_level]
+            pygame.draw.lines(self.display_surface, '#ffd700', False, points, 20)
 
     def setup_icon(self) -> None:
         self.icon = pygame.sprite.GroupSingle()
