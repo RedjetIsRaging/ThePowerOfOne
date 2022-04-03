@@ -9,6 +9,7 @@ from clouds import Clouds
 from game_data import levels
 
 
+# I am assuredly losing my mind
 class Level:
     def __init__(self, current_level, surface, create_overworld):
         # Set up the level
@@ -63,7 +64,7 @@ class Level:
                     y = row_index * tile_size
 
                     if tile_type not in ['player', 'enemies', 'flower', 'constraints']:
-                        terrain_tile_list = import_cut_graphics('levels/level_1/graphics/outside_tileset.png')
+                        terrain_tile_list = import_cut_graphics('assets/levels/level_1/graphics/outside_tileset.png')
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_size, x, y, tile_surface)
                         sprite_group.add(sprite)
@@ -72,7 +73,7 @@ class Level:
                             self.terrain_sprites.append(sprite)
 
                     if tile_type == 'flower':
-                        sprite = AnimatedTile(tile_size, x, y, 'levels/level_1/graphics/tiles/flower')
+                        sprite = AnimatedTile(tile_size, x, y, 'assets/levels/level_1/graphics/tiles/flower')
                         sprite.animation_speed = 0.03  # don't need our flowers spinning *that* fast, do we
                         sprite_group.add(sprite)
 
@@ -96,7 +97,7 @@ class Level:
                     sprite = Player((x, y))
                     self.player.add(sprite)
                 if val == '1':
-                    end_surface = pygame.image.load('levels/universal/player.png').convert_alpha()
+                    end_surface = pygame.image.load('assets/levels/universal/player.png').convert_alpha()
                     sprite = StaticTile(tile_size, x, y, end_surface)
                     self.goal.add(sprite)
 

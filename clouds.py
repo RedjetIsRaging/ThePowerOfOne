@@ -7,7 +7,7 @@ from tiles import StaticTile
 
 class Clouds:
     def __init__(self, horizon, level_width, cloud_number):
-        cloud_surfaces = import_folder('levels/universal/clouds')
+        cloud_surfaces = import_folder('assets/levels/universal/clouds')
         min_x = -game_width
         max_x = level_width + game_width
         min_y = 0
