@@ -4,16 +4,23 @@ from enemy import Enemy
 from settings import tile_size, game_width, player_speed
 from player import Player
 from utils import import_csv_layout, import_cut_graphics
-from game_data import level_1_files
+from game_data import level_1
 from clouds import Clouds
+from game_data import levels
 
 
 class Level:
-    def __init__(self, level_data: list[str], surface):
+    def __init__(self, current_level, surface, create_overworld):
         # Set up the level
         self.display_surface = surface
         self.player = pygame.sprite.GroupSingle()
         self.world_shift = 0
+
+        # Overworld connection
+        self.create_overworld = create_overworld
+        self.current_level = current_level
+        level_data = levels.get(self.current_level)
+        self.new_max_level = level_data.get('unlock')
 
         # Player
         player_layout = import_csv_layout(level_data['player'])
@@ -23,7 +30,10 @@ class Level:
 
         self.sprites_group = []
         self.terrain_sprites = []
-        for item in level_1_files.keys():
+        for item in level_1.keys():
+            if item == 'player':
+                break
+
             if item not in ['player', 'enemies', 'flower', 'constraints']:
                 layout = import_csv_layout(level_data[item])
                 self.sprites_group.append(self.create_tile_group(layout, item))
@@ -157,6 +167,14 @@ class Level:
             player.on_ground = False
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_v]:
+            self.create_overworld(self.current_level, self.new_max_level)
+        elif keys[pygame.K_ESCAPE]:
+            self.create_overworld(self.current_level, 0)
 
     def enemy_collision_reverse(self):
         for enemy in self.enemy_sprites.sprites():
